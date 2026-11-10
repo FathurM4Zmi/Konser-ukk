@@ -80,6 +80,7 @@ frontend-ukk/
 │   └── uploads/               # File bukti pembayaran
 │
 ├── docs/ERD.md                # ERD (Mermaid) + penjelasan relasi
+├── docs/mobile/               # BRD, PRD, FRD aplikasi mobile pelanggan
 ├── package.json               # Script menjalankan API + web sekaligus
 └── README.md
 ```
@@ -105,6 +106,18 @@ order_items ──< tickets (QR Code)
 - `events` → `ticket_categories` (1:N), `events` ↔ `artists` (N:M lewat `event_artists`)
 - `orders` → `order_items` (1:N), `ticket_categories` → `order_items` (1:N)
 - `order_items` → `tickets` (1:N, 1 tiket = 1 QR unik)
+
+---
+
+## 📱 Dokumen Produk Mobile
+
+Aplikasi mobile pelanggan belum dibuat, tetapi dokumen produknya sudah lengkap dan disusun mengikuti API yang ada:
+
+| Dokumen | Isi |
+| --- | --- |
+| [BRD](docs/mobile/BRD.md) | Latar belakang bisnis, tujuan & KPI, ruang lingkup, stakeholder, kebutuhan bisnis, risiko |
+| [PRD](docs/mobile/PRD.md) | Visi produk, persona, user journey, peta fitur & prioritas, user stories, roadmap, metrik |
+| [FRD](docs/mobile/FRD.md) | Detail fungsi per modul, alur utama & alternatif, validasi, pemetaan endpoint, state machine pesanan, traceability, gap analysis |
 
 ---
 
