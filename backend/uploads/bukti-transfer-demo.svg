@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="820" viewBox="0 0 620 820" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="620" height="820" fill="#eef2f7"/>
+  <rect x="40" y="40" width="540" height="740" rx="18" fill="#ffffff"/>
+  <rect x="40" y="40" width="540" height="110" rx="18" fill="#4f46e5"/>
+  <rect x="40" y="120" width="540" height="30" fill="#4f46e5"/>
+  <text x="70" y="92" fill="#c7d2fe" font-size="13" letter-spacing="3">BANK DEMO INDONESIA</text>
+  <text x="70" y="124" fill="#ffffff" font-size="22" font-weight="700">Bukti Transfer</text>
+
+  <text x="70" y="196" fill="#94a3b8" font-size="12" letter-spacing="2">STATUS TRANSAKSI</text>
+  <text x="70" y="226" fill="#059669" font-size="20" font-weight="700">BERHASIL</text>
+  <text x="480" y="196" fill="#94a3b8" font-size="12">08 Nov 2026</text>
+  <text x="480" y="216" fill="#334155" font-size="13">09:40 WIB</text>
+
+  <line x1="70" y1="252" x2="550" y2="252" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <text x="70" y="288" fill="#94a3b8" font-size="12">NOMINAL TRANSFER</text>
+  <text x="70" y="328" fill="#0f172a" font-size="34" font-weight="800">Rp 700.000</text>
+
+  <text x="70" y="384" fill="#94a3b8" font-size="12">DARI</text>
+  <text x="70" y="410" fill="#0f172a" font-size="15" font-weight="600">BUDI SANTOSO</text>
+  <text x="70" y="432" fill="#64748b" font-size="12">0812 **** 0002</text>
+
+  <text x="70" y="484" fill="#94a3b8" font-size="12">KE</text>
+  <text x="70" y="510" fill="#0f172a" font-size="15" font-weight="600">KONSERIA TICKETING</text>
+  <text x="70" y="532" fill="#64748b" font-size="12">Bank Demo · 123-456-7890</text>
+
+  <text x="70" y="584" fill="#94a3b8" font-size="12">BERITA TRANSFER</text>
+  <text x="70" y="610" fill="#0f172a" font-size="14">Pembayaran tiket konser</text>
+
+  <text x="70" y="660" fill="#94a3b8" font-size="12">REFERENSI</text>
+  <text x="70" y="686" fill="#0f172a" font-size="14" font-family="Consolas, monospace">TRX-20261108-884213</text>
+
+  <line x1="70" y1="716" x2="550" y2="716" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="70" y="744" fill="#94a3b8" font-size="11">Dokumen ini adalah contoh untuk keperluan demo aplikasi.</text>
+  <text x="70" y="762" fill="#94a3b8" font-size="11">Bukan bukti transaksi sebenarnya.</text>
+</svg>

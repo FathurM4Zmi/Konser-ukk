@@ -1,0 +1,43 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# next.js
+admin-web/.next/
+admin-web/out/
+admin-web/build/
+next-env.d.ts
+
+# production
+dist/
+build/
+
+# env
+.env
+.env.local
+.env.*.local
+backend/.env
+
+# uploads (bukti pembayaran pelanggan)
+backend/uploads/*
+!backend/uploads/.gitkeep
+!backend/uploads/bukti-transfer-demo.svg
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# os
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+.idea/
+
+# typescript
+*.tsbuildinfo
