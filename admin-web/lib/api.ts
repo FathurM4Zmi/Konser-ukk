@@ -57,3 +57,76 @@ export const assetUrl = (path?: string | null) => {
   if (path.startsWith("http")) return path;
   return `${ASSET_URL}${path}`;
 };
+
+/* ------------------------- Realtime dashboard ------------------------- */
+
+export type LiveStatus = "connecting" | "live" | "offline";
+
+/**
+ * Berlangganan snapshot dashboard lewat SSE.
+ * Memakai fetch + ReadableStream (bukan EventSource) supaya header
+ * Authorization tetap bisa dikirim.
+ * Mengembalikan fungsi untuk berhenti berlangganan.
+ */
+export function openDashboardStream(
+  onSnapshot: (data: Record<string, unknown> & { server_time?: string }) => void,
+  onStatus?: (status: LiveStatus) => void
+) {
+  const controller = new AbortController();
+  let stopped = false;
+  let retry: ReturnType<typeof setTimeout> | null = null;
+
+  const connect = async () => {
+    if (stopped) return;
+    onStatus?.("connecting");
+
+    try {
+      const token = getToken();
+      const res = await fetch(`${API_URL}/dashboard/stream`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        signal: controller.signal,
+        cache: "no-store",
+      });
+
+      if (!res.ok || !res.body) throw new Error("stream gagal");
+      onStatus?.("live");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (!stopped) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const chunks = buffer.split("\n\n");
+        buffer = chunks.pop() || "";
+
+        for (const chunk of chunks) {
+          const line = chunk.split("\n").find((row) => row.startsWith("data:"));
+          if (!line) continue;
+          try {
+            onSnapshot(JSON.parse(line.slice(5).trim()));
+          } catch {
+            // Abaikan potongan data yang belum lengkap.
+          }
+        }
+      }
+    } catch {
+      // Jaringan putus / server restart: coba lagi di bawah.
+    }
+
+    if (stopped) return;
+    onStatus?.("offline");
+    retry = setTimeout(connect, 5000);
+  };
+
+  connect();
+
+  return () => {
+    stopped = true;
+    controller.abort();
+    if (retry) clearTimeout(retry);
+  };
+}

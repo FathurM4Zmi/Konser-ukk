@@ -195,6 +195,11 @@ Menjelaskan **perilaku fungsional** aplikasi mobile secara rinci dan dapat diuji
 - Data yang ditampilkan identik dengan yang dikelola admin (tanpa cache lebih dari 60 detik).
 - Sisa kuota dihitung dari server (`remaining`), bukan dihitung di aplikasi.
 
+**Endpoint pendukung (opsional, sudah tersedia)**
+`GET /events/:id/stats` → statistik live tanpa token: `percent_sold`, `sold_24h`, dan
+`estimated_sold_out_at` per kelas tiket. Cocok untuk badge "Terjual 55%", label "Hampir habis",
+atau hitung mundur "perkiraan sold out".
+
 ---
 
 ## 6. Modul ORDER

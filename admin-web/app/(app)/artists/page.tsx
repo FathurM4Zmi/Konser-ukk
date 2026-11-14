@@ -119,7 +119,7 @@ export default function ArtistsPage() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-xs">
-          <IconSearch className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+          <IconSearch className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -151,7 +151,7 @@ export default function ArtistsPage() {
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((artist) => (
             <div key={artist.id} className="card group overflow-hidden">
-              <div className="relative h-40 overflow-hidden bg-gradient-to-br from-violet-700/40 to-fuchsia-700/20">
+              <div className="relative h-40 overflow-hidden bg-zinc-100">
                 {artist.photo_url ? (
                   <img
                     src={artist.photo_url}
@@ -160,20 +160,19 @@ export default function ArtistsPage() {
                   />
                 ) : (
                   <div className="grid h-full place-items-center">
-                    <span className="text-4xl font-black text-white/20">{artist.name.charAt(0)}</span>
+                    <span className="text-4xl font-semibold text-zinc-400">{artist.name.charAt(0)}</span>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b14] via-transparent to-transparent" />
                 <div className="absolute right-2 top-2 flex gap-1 opacity-0 transition group-hover:opacity-100">
                   <button
                     onClick={() => openEdit(artist)}
-                    className="rounded-lg bg-black/50 p-2 text-slate-200 backdrop-blur transition hover:text-violet-300"
+                    className="rounded-lg bg-white/90 p-2 text-zinc-600 shadow-sm transition hover:text-blue-600"
                   >
                     <IconEdit className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => setDeleteTarget(artist)}
-                    className="rounded-lg bg-black/50 p-2 text-slate-200 backdrop-blur transition hover:text-rose-300"
+                    className="rounded-lg bg-white/90 p-2 text-zinc-600 shadow-sm transition hover:text-rose-600"
                   >
                     <IconTrash className="h-4 w-4" />
                   </button>
@@ -183,14 +182,14 @@ export default function ArtistsPage() {
               <div className="p-4">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <p className="text-sm font-bold text-white">{artist.name}</p>
-                    <p className="text-[11px] text-violet-300">{artist.genre || "Tanpa genre"}</p>
+                    <p className="text-sm font-semibold text-zinc-900">{artist.name}</p>
+                    <p className="text-[11px] text-blue-600">{artist.genre || "Tanpa genre"}</p>
                   </div>
-                  <span className="badge bg-white/5 text-slate-300 ring-white/10">
+                  <span className="badge bg-zinc-100 text-zinc-600 ring-zinc-200">
                     {artist.total_event || 0} konser
                   </span>
                 </div>
-                <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed text-slate-500">
+                <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed text-zinc-500">
                   {artist.bio || "Belum ada bio."}
                 </p>
               </div>
@@ -224,7 +223,7 @@ export default function ArtistsPage() {
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="Contoh: Tulus"
             />
-            {formErrors.name && <p className="mt-1 text-xs text-rose-400">{formErrors.name}</p>}
+            {formErrors.name && <p className="mt-1 text-xs text-rose-600">{formErrors.name}</p>}
           </div>
 
           <div>
@@ -235,7 +234,7 @@ export default function ArtistsPage() {
               onChange={(e) => setForm({ ...form, genre: e.target.value })}
               placeholder="Pop / Indie / Rock"
             />
-            {formErrors.genre && <p className="mt-1 text-xs text-rose-400">{formErrors.genre}</p>}
+            {formErrors.genre && <p className="mt-1 text-xs text-rose-600">{formErrors.genre}</p>}
           </div>
 
           <div>
@@ -246,7 +245,7 @@ export default function ArtistsPage() {
               onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
               placeholder="https://..."
             />
-            {formErrors.photo_url && <p className="mt-1 text-xs text-rose-400">{formErrors.photo_url}</p>}
+            {formErrors.photo_url && <p className="mt-1 text-xs text-rose-600">{formErrors.photo_url}</p>}
           </div>
 
           <div>
@@ -257,7 +256,7 @@ export default function ArtistsPage() {
               onChange={(e) => setForm({ ...form, bio: e.target.value })}
               placeholder="Deskripsi singkat tentang artis."
             />
-            {formErrors.bio && <p className="mt-1 text-xs text-rose-400">{formErrors.bio}</p>}
+            {formErrors.bio && <p className="mt-1 text-xs text-rose-600">{formErrors.bio}</p>}
           </div>
         </form>
       </Modal>

@@ -126,6 +126,61 @@ export interface DashboardData {
     event_title: string;
   }[];
   revenue_by_month: { period: string; revenue: number; total_order: number }[];
+  server_time?: string;
+}
+
+export interface HourlyPoint {
+  hour: number;
+  label: string;
+  total_order: number;
+  revenue: number;
+}
+
+export interface DailyPoint {
+  day: string;
+  label: string;
+  total_order: number;
+  revenue: number;
+}
+
+export interface SoldOutForecast {
+  category_id: number;
+  category_name: string;
+  event_id: number;
+  event_title: string;
+  quota: number;
+  sold: number;
+  remaining: number;
+  percent_sold: number;
+  sold_7d: number;
+  per_day: number;
+  days_left: number | null;
+  estimated_sold_out_at: string | null;
+}
+
+export interface AnalyticsData {
+  hourly: HourlyPoint[];
+  daily: DailyPoint[];
+  status_distribution: { status: OrderStatus; total: number }[];
+  sold_out_forecast: SoldOutForecast[];
+  top_events: {
+    id: number;
+    title: string;
+    city: string;
+    event_date: string;
+    total_order: number;
+    revenue: number;
+  }[];
+  kpi: {
+    avg_order_value: number;
+    conversion_rate: number;
+    tickets_today: number;
+    revenue_today: number;
+    active_events: number;
+    peak_hour: number;
+    peak_hour_label: string;
+    peak_hour_orders: number;
+  };
 }
 
 export interface Paginated<T> {

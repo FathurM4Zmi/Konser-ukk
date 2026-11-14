@@ -38,12 +38,12 @@ export const percent = (sold: number, quota: number) =>
   quota > 0 ? Math.min(Math.round((sold / quota) * 100), 100) : 0;
 
 export const statusLabel: Record<string, { text: string; className: string }> = {
-  pending: { text: "Belum bayar", className: "bg-amber-400/10 text-amber-300 ring-amber-400/30" },
+  pending: { text: "Belum bayar", className: "bg-amber-50 text-amber-700 ring-amber-200" },
   waiting_verification: {
     text: "Menunggu verifikasi",
-    className: "bg-sky-400/10 text-sky-300 ring-sky-400/30",
+    className: "bg-blue-50 text-blue-700 ring-blue-200",
   },
-  paid: { text: "Lunas", className: "bg-emerald-400/10 text-emerald-300 ring-emerald-400/30" },
-  rejected: { text: "Ditolak", className: "bg-rose-400/10 text-rose-300 ring-rose-400/30" },
-  cancelled: { text: "Dibatalkan", className: "bg-slate-400/10 text-slate-300 ring-slate-400/30" },
+  paid: { text: "Lunas", className: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
+  rejected: { text: "Ditolak", className: "bg-rose-50 text-rose-700 ring-rose-200" },
+  cancelled: { text: "Dibatalkan", className: "bg-zinc-100 text-zinc-600 ring-zinc-200" },
 };

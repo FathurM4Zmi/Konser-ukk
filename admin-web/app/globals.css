@@ -1,92 +1,99 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
+  }
+
+  html {
+    background-color: #f6f7f9;
   }
 
   body {
-    background-color: #06060b;
-    color: #e6e6f0;
+    background-color: #f6f7f9;
+    color: #18181b;
     font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
-    background-image:
-      radial-gradient(900px 500px at 8% -8%, rgba(124, 58, 237, 0.18), transparent 60%),
-      radial-gradient(700px 420px at 95% 0%, rgba(236, 72, 153, 0.12), transparent 60%);
-    background-attachment: fixed;
+    text-rendering: optimizeLegibility;
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+    scrollbar-color: #d4d4d8 transparent;
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.16);
+    background: #d4d4d8;
+    border: 3px solid transparent;
+    background-clip: content-box;
     border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1a1aa;
+    background-clip: content-box;
   }
 }
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-white/10 bg-white/[0.035] backdrop-blur-sm;
+    @apply rounded-xl border border-zinc-200 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)];
   }
 
   .label {
-    @apply mb-1.5 block text-[13px] font-medium text-slate-300;
+    @apply mb-1.5 block text-[13px] font-medium text-zinc-700;
   }
 
   .input {
-    @apply w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-100
-      outline-none transition placeholder:text-slate-500
-      focus:border-violet-400/60 focus:bg-white/[0.06] focus:ring-4 focus:ring-violet-500/10;
+    @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900
+      outline-none transition placeholder:text-zinc-400
+      focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10;
   }
 
-  select.input option {
-    @apply bg-[#12121f] text-slate-100;
+  select.input {
+    @apply bg-white;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium
       transition disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium
       transition disabled:cursor-not-allowed disabled:opacity-50
-      bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-900/30
-      hover:from-violet-400 hover:to-fuchsia-400;
+      bg-zinc-900 text-white shadow-sm hover:bg-zinc-800 active:bg-zinc-950;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium
       transition disabled:cursor-not-allowed disabled:opacity-50
-      border border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08];
+      border border-zinc-300 bg-white text-zinc-700 shadow-sm hover:bg-zinc-50 active:bg-zinc-100;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium
       transition disabled:cursor-not-allowed disabled:opacity-50
-      border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20;
+      border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100;
   }
 
   .badge {
-    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ring-inset;
+    @apply inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[11px] font-medium ring-1 ring-inset;
   }
 
   .th {
-    @apply px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400;
+    @apply bg-zinc-50 px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-zinc-500;
   }
 
   .td {
-    @apply px-4 py-3.5 text-sm text-slate-300;
+    @apply px-4 py-3 text-sm text-zinc-600;
   }
 }

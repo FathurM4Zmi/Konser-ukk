@@ -4,6 +4,7 @@ import {
   deleteEvent,
   getEventAdmin,
   getEventPublic,
+  getEventStats,
   listEventsAdmin,
   listEventsPublic,
   setSalesStatus,
@@ -24,6 +25,7 @@ const router = Router();
 
 // --- publik (dipakai aplikasi mobile) ---
 router.get("/", listEventsPublic);
+router.get("/:id/stats", getEventStats);
 router.get("/:id", getEventPublic);
 
 // --- admin (web) ---

@@ -153,6 +153,19 @@ export const setSalesStatus = asyncHandler(async (req, res) => {
 
 /* ----------------------------- PUBLIC / MOBILE ----------------------------- */
 
+/** Estimasi sold out dari kecepatan penjualan 7 hari terakhir. */
+const forecastSoldOut = (remaining, sold7d) => {
+  const perDay = Number(sold7d) / 7;
+  if (perDay <= 0 || remaining <= 0) return { per_day: Number(perDay.toFixed(2)), days_left: null, estimated_sold_out_at: null };
+
+  const daysLeft = Math.ceil(remaining / perDay);
+  return {
+    per_day: Number(perDay.toFixed(2)),
+    days_left: daysLeft,
+    estimated_sold_out_at: new Date(Date.now() + daysLeft * 86400000).toISOString().slice(0, 10),
+  };
+};
+
 export const listEventsPublic = asyncHandler(async (req, res) => {
   const search = (req.query.search || "").trim();
   const city = (req.query.city || "").trim();
@@ -182,7 +195,18 @@ export const listEventsPublic = asyncHandler(async (req, res) => {
     params
   );
 
-  res.json({ success: true, data: rows });
+  const data = rows.map((row) => {
+    const quota = Number(row.total_quota);
+    const sold = Number(row.total_sold);
+    return {
+      ...row,
+      remaining: Math.max(quota - sold, 0),
+      percent_sold: quota > 0 ? Math.round((sold / quota) * 100) : 0,
+      is_sold_out: quota > 0 && sold >= quota,
+    };
+  });
+
+  res.json({ success: true, data });
 });
 
 export const getEventPublic = asyncHandler(async (req, res) => {
@@ -200,8 +224,99 @@ export const getEventPublic = asyncHandler(async (req, res) => {
     [event.id]
   );
 
+  const totalQuota = categories.reduce((sum, cat) => sum + Number(cat.quota), 0);
+  const totalSold = categories.reduce((sum, cat) => sum + Number(cat.sold), 0);
+
   res.json({
     success: true,
-    data: { ...event, categories, artists: await attachArtists(event.id) },
+    data: {
+      ...event,
+      total_quota: totalQuota,
+      total_sold: totalSold,
+      remaining: Math.max(totalQuota - totalSold, 0),
+      percent_sold: totalQuota > 0 ? Math.round((totalSold / totalQuota) * 100) : 0,
+      is_sold_out: totalQuota > 0 && totalSold >= totalQuota,
+      categories: categories.map((cat) => ({
+        ...cat,
+        percent_sold: Number(cat.quota) > 0 ? Math.round((Number(cat.sold) / Number(cat.quota)) * 100) : 0,
+      })),
+      artists: await attachArtists(event.id),
+    },
+  });
+});
+
+/**
+ * Statistik live sebuah konser untuk aplikasi mobile:
+ * sisa kuota, kecepatan penjualan, dan estimasi sold out.
+ */
+export const getEventStats = asyncHandler(async (req, res) => {
+  const [rows] = await pool.query(
+    "SELECT id, title, sales_status FROM events WHERE id = ? AND status = 'published'",
+    [req.params.id]
+  );
+  if (!rows.length) throw new HttpError(404, "Konser tidak ditemukan.");
+
+  const [categories] = await pool.query(
+    `SELECT tc.id, tc.name, tc.price, tc.quota, tc.sold,
+            (SELECT COALESCE(SUM(oi.quantity), 0)
+             FROM order_items oi
+             JOIN orders o ON o.id = oi.order_id
+             WHERE oi.ticket_category_id = tc.id
+               AND o.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+               AND o.status IN ('pending', 'waiting_verification', 'paid')) AS sold_7d
+     FROM ticket_categories tc
+     WHERE tc.event_id = ?
+     ORDER BY tc.price DESC`,
+    [req.params.id]
+  );
+
+  const [[recent]] = await pool.query(
+    `SELECT COALESCE(SUM(oi.quantity), 0) AS sold_24h
+     FROM order_items oi
+     JOIN orders o ON o.id = oi.order_id
+     WHERE o.event_id = ?
+       AND o.created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+       AND o.status IN ('pending', 'waiting_verification', 'paid')`,
+    [req.params.id]
+  );
+
+  const items = categories.map((cat) => {
+    const quota = Number(cat.quota);
+    const sold = Number(cat.sold);
+    const remaining = Math.max(quota - sold, 0);
+    return {
+      ...cat,
+      quota,
+      sold,
+      remaining,
+      percent_sold: quota > 0 ? Math.round((sold / quota) * 100) : 0,
+      is_sold_out: quota > 0 && sold >= quota,
+      ...forecastSoldOut(remaining, cat.sold_7d),
+    };
+  });
+
+  const totalQuota = items.reduce((sum, cat) => sum + cat.quota, 0);
+  const totalSold = items.reduce((sum, cat) => sum + cat.sold, 0);
+
+  // Konser baru benar-benar sold out saat semua kelas habis,
+  // jadi estimasi event = kelas yang paling lama habis.
+  const estimates = items.map((cat) => cat.estimated_sold_out_at).filter(Boolean).sort();
+  const allKnown = items.every((cat) => cat.is_sold_out || cat.estimated_sold_out_at);
+
+  res.json({
+    success: true,
+    data: {
+      event_id: rows[0].id,
+      event_title: rows[0].title,
+      sales_status: rows[0].sales_status,
+      total_quota: totalQuota,
+      total_sold: totalSold,
+      remaining: Math.max(totalQuota - totalSold, 0),
+      percent_sold: totalQuota > 0 ? Math.round((totalSold / totalQuota) * 100) : 0,
+      is_sold_out: totalQuota > 0 && totalSold >= totalQuota,
+      sold_24h: Number(recent.sold_24h),
+      estimated_sold_out_at: allKnown && estimates.length ? estimates[estimates.length - 1] : null,
+      categories: items,
+    },
   });
 });

@@ -187,7 +187,7 @@ export default function EventsPage() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-xs">
-          <IconSearch className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+          <IconSearch className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -220,7 +220,7 @@ export default function EventsPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px]">
               <thead>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-zinc-200">
                   <th className="th">Konser</th>
                   <th className="th">Jadwal</th>
                   <th className="th">Kuota</th>
@@ -229,18 +229,18 @@ export default function EventsPage() {
                   <th className="th text-right">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-zinc-100">
                 {filtered.map((event) => {
                   const pct = percent(event.total_sold || 0, event.total_quota || 0);
                   return (
-                    <tr key={event.id} className="transition hover:bg-white/[0.02]">
+                    <tr key={event.id} className="transition hover:bg-zinc-50">
                       <td className="td">
                         <div className="flex items-center gap-3">
-                          <div className="h-12 w-16 shrink-0 overflow-hidden rounded-lg border border-white/10 bg-white/5">
+                          <div className="h-12 w-16 shrink-0 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-100">
                             {event.poster_url ? (
                               <img src={event.poster_url} alt={event.title} className="h-full w-full object-cover" />
                             ) : (
-                              <div className="grid h-full place-items-center text-slate-600">
+                              <div className="grid h-full place-items-center text-zinc-400">
                                 <IconTicket className="h-5 w-5" />
                               </div>
                             )}
@@ -248,35 +248,35 @@ export default function EventsPage() {
                           <div className="min-w-0">
                             <Link
                               href={`/events/${event.id}`}
-                              className="block max-w-[240px] truncate text-sm font-semibold text-white hover:text-violet-300"
+                              className="block max-w-[240px] truncate text-sm font-medium text-zinc-900 hover:text-blue-600"
                             >
                               {event.title}
                             </Link>
-                            <p className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-500">
+                            <p className="mt-0.5 flex items-center gap-1 text-[11px] text-zinc-500">
                               <IconMapPin className="h-3 w-3" /> {event.venue}, {event.city}
                             </p>
                           </div>
                         </div>
                       </td>
-                      <td className="td whitespace-nowrap text-xs text-slate-400">
+                      <td className="td whitespace-nowrap text-xs text-zinc-500">
                         {formatDateTime(event.event_date)}
                       </td>
                       <td className="td w-[180px]">
-                        <div className="flex items-center justify-between text-[11px] text-slate-400">
+                        <div className="flex items-center justify-between text-[11px] text-zinc-500">
                           <span>
                             {event.total_sold || 0} / {event.total_quota || 0}
                           </span>
-                          <span className="font-semibold text-slate-300">{pct}%</span>
+                          <span className="font-semibold text-zinc-600">{pct}%</span>
                         </div>
                         <Progress value={pct} className="mt-1.5" />
-                        <p className="mt-1 text-[10px] text-slate-600">{event.total_category || 0} kelas tiket</p>
+                        <p className="mt-1 text-[10px] text-zinc-400">{event.total_category || 0} kelas tiket</p>
                       </td>
                       <td className="td">
                         <span
                           className={`badge ${
                             event.status === "published"
-                              ? "bg-emerald-400/10 text-emerald-300 ring-emerald-400/30"
-                              : "bg-slate-400/10 text-slate-400 ring-slate-400/20"
+                              ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
+                              : "bg-zinc-100 text-zinc-500 ring-zinc-200"
                           }`}
                         >
                           {event.status === "published" ? "Publik" : "Draft"}
@@ -285,10 +285,10 @@ export default function EventsPage() {
                       <td className="td">
                         <button
                           onClick={() => setStatusTarget(event)}
-                          className={`badge transition hover:brightness-125 ${
+                          className={`badge transition hover:opacity-80 ${
                             event.sales_status === "open"
-                              ? "bg-sky-400/10 text-sky-300 ring-sky-400/30"
-                              : "bg-rose-400/10 text-rose-300 ring-rose-400/30"
+                              ? "bg-blue-50 text-blue-700 ring-blue-200"
+                              : "bg-rose-50 text-rose-600 ring-rose-200"
                           }`}
                         >
                           <span
@@ -303,21 +303,21 @@ export default function EventsPage() {
                         <div className="flex items-center justify-end gap-1">
                           <Link
                             href={`/events/${event.id}`}
-                            className="rounded-lg p-2 text-slate-400 transition hover:bg-white/5 hover:text-white"
+                            className="rounded-lg p-2 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900"
                             title="Detail & kelas tiket"
                           >
                             <IconTicket className="h-4 w-4" />
                           </Link>
                           <button
                             onClick={() => openEdit(event)}
-                            className="rounded-lg p-2 text-slate-400 transition hover:bg-white/5 hover:text-violet-300"
+                            className="rounded-lg p-2 text-zinc-500 transition hover:bg-zinc-100 hover:text-blue-600"
                             title="Edit"
                           >
                             <IconEdit className="h-4 w-4" />
                           </button>
                           <button
                             onClick={() => setDeleteTarget(event)}
-                            className="rounded-lg p-2 text-slate-400 transition hover:bg-rose-500/10 hover:text-rose-300"
+                            className="rounded-lg p-2 text-zinc-500 transition hover:bg-rose-50 hover:text-rose-600"
                             title="Hapus"
                           >
                             <IconTrash className="h-4 w-4" />
@@ -360,7 +360,7 @@ export default function EventsPage() {
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               placeholder="Contoh: Tulus: Manusia Tour 2026"
             />
-            {formErrors.title && <p className="mt-1 text-xs text-rose-400">{formErrors.title}</p>}
+            {formErrors.title && <p className="mt-1 text-xs text-rose-600">{formErrors.title}</p>}
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -372,7 +372,7 @@ export default function EventsPage() {
                 onChange={(e) => setForm({ ...form, venue: e.target.value })}
                 placeholder="Istora Senayan"
               />
-              {formErrors.venue && <p className="mt-1 text-xs text-rose-400">{formErrors.venue}</p>}
+              {formErrors.venue && <p className="mt-1 text-xs text-rose-600">{formErrors.venue}</p>}
             </div>
             <div>
               <label className="label">Kota</label>
@@ -382,7 +382,7 @@ export default function EventsPage() {
                 onChange={(e) => setForm({ ...form, city: e.target.value })}
                 placeholder="Jakarta"
               />
-              {formErrors.city && <p className="mt-1 text-xs text-rose-400">{formErrors.city}</p>}
+              {formErrors.city && <p className="mt-1 text-xs text-rose-600">{formErrors.city}</p>}
             </div>
           </div>
 
@@ -395,7 +395,7 @@ export default function EventsPage() {
                 value={form.event_date}
                 onChange={(e) => setForm({ ...form, event_date: e.target.value })}
               />
-              {formErrors.event_date && <p className="mt-1 text-xs text-rose-400">{formErrors.event_date}</p>}
+              {formErrors.event_date && <p className="mt-1 text-xs text-rose-600">{formErrors.event_date}</p>}
             </div>
             <div>
               <label className="label">Status</label>
@@ -418,7 +418,7 @@ export default function EventsPage() {
               onChange={(e) => setForm({ ...form, poster_url: e.target.value })}
               placeholder="https://images.unsplash.com/..."
             />
-            {formErrors.poster_url && <p className="mt-1 text-xs text-rose-400">{formErrors.poster_url}</p>}
+            {formErrors.poster_url && <p className="mt-1 text-xs text-rose-600">{formErrors.poster_url}</p>}
           </div>
 
           <div>
@@ -433,15 +433,15 @@ export default function EventsPage() {
 
           <div>
             <label className="label">Line-up Artis</label>
-            <div className="max-h-40 space-y-1 overflow-y-auto rounded-xl border border-white/10 bg-white/[0.02] p-2">
-              {artists.length === 0 && <p className="p-2 text-xs text-slate-500">Belum ada artis terdaftar.</p>}
+            <div className="max-h-40 space-y-1 overflow-y-auto rounded-xl border border-zinc-200 bg-zinc-50 p-2">
+              {artists.length === 0 && <p className="p-2 text-xs text-zinc-500">Belum ada artis terdaftar.</p>}
               {artists.map((artist) => {
                 const checked = form.artist_ids.includes(artist.id);
                 return (
                   <label
                     key={artist.id}
                     className={`flex cursor-pointer items-center gap-3 rounded-lg px-2.5 py-2 text-sm transition ${
-                      checked ? "bg-violet-500/10 text-violet-200" : "text-slate-300 hover:bg-white/5"
+                      checked ? "bg-blue-50 text-blue-700" : "text-zinc-600 hover:bg-zinc-100"
                     }`}
                   >
                     <input
@@ -455,10 +455,10 @@ export default function EventsPage() {
                             : [...form.artist_ids, artist.id],
                         })
                       }
-                      className="h-4 w-4 accent-violet-500"
+                      className="h-4 w-4 accent-blue-600"
                     />
                     <span className="flex-1">{artist.name}</span>
-                    <span className="text-[11px] text-slate-500">{artist.genre}</span>
+                    <span className="text-[11px] text-zinc-500">{artist.genre}</span>
                   </label>
                 );
               })}
@@ -494,16 +494,16 @@ export default function EventsPage() {
           </>
         }
       >
-        <p className="text-sm leading-relaxed text-slate-300">
+        <p className="text-sm leading-relaxed text-zinc-600">
           {statusTarget?.sales_status === "open" ? (
             <>
               Setelah ditutup, pelanggan tidak dapat lagi memesan tiket untuk{" "}
-              <span className="font-semibold text-white">{statusTarget?.title}</span>. Pesanan yang sudah ada tetap
+              <span className="font-semibold text-zinc-900">{statusTarget?.title}</span>. Pesanan yang sudah ada tetap
               diproses.
             </>
           ) : (
             <>
-              Penjualan tiket untuk <span className="font-semibold text-white">{statusTarget?.title}</span> akan
+              Penjualan tiket untuk <span className="font-semibold text-zinc-900">{statusTarget?.title}</span> akan
               dibuka kembali dan pelanggan bisa memesan lagi.
             </>
           )}

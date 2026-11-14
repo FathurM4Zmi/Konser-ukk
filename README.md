@@ -14,6 +14,10 @@ Repo ini berisi frontend web admin, backend API, dan database dalam satu tempat.
 | --- | --- |
 | Login admin (JWT) | ✅ |
 | Dashboard jumlah tiket terjual & pendapatan | ✅ |
+| Dashboard **realtime** (Server-Sent Events, auto-refresh 5 detik) | ✅ |
+| Analitik: jam ramai pembelian, tren 14 hari, distribusi status | ✅ |
+| Prediksi sold out per kelas tiket (dari kecepatan penjualan 7 hari) | ✅ |
+| KPI: rata-rata nilai pesanan, tingkat konversi, tiket hari ini | ✅ |
 | CRUD Event / Konser | ✅ |
 | CRUD Kategori Tiket (VIP, Festival, Tribune, dll) | ✅ |
 | CRUD Penyanyi / Artis + line-up konser | ✅ |
@@ -232,6 +236,7 @@ Authorization: Bearer <token>
 | --- | --- | --- |
 | GET | `/events` | Daftar konser `published` (+ `?search=`, `?city=`) |
 | GET | `/events/:id` | Detail konser, kelas tiket, line-up |
+| GET | `/events/:id/stats` | Statistik live: sisa kuota, penjualan 24 jam, estimasi sold out per kelas |
 | GET | `/artists` | Daftar artis (butuh admin) |
 
 ### Pesanan (mobile / pelanggan)
@@ -268,6 +273,8 @@ Content-Type: application/json
 | Method | Endpoint | Keterangan |
 | --- | --- | --- |
 | GET | `/dashboard` | Statistik, penjualan per konser, pesanan terbaru |
+| GET | `/dashboard/analytics` | Jam ramai, tren 14 hari, distribusi status, prediksi sold out, KPI |
+| GET | `/dashboard/stream` | **SSE** — snapshot dashboard dikirim tiap 5 detik (header `Authorization` wajib) |
 | GET | `/events/admin/all` | Semua konser + agregat kuota |
 | GET | `/events/admin/:id` | Detail konser (dengan kategori & artis) |
 | POST | `/events/admin` | Buat konser |
@@ -282,6 +289,42 @@ Content-Type: application/json
 | POST/PUT/DELETE | `/artists`, `/artists/:id` | CRUD artis |
 | GET | `/admin/orders` | Daftar pesanan (`?status=&search=&page=&limit=`) |
 | PATCH | `/admin/orders/:id/verify` | `{ "action": "approve" \| "reject", "note": "..." }` |
+
+### Realtime dashboard (SSE)
+
+`GET /api/dashboard/stream` mengirim event `snapshot` setiap 5 detik:
+
+```text
+event: snapshot
+data: { "stats": { ... }, "sales_per_event": [ ... ], "server_time": "2026-11-14T07:41:00.000Z" }
+```
+
+`EventSource` bawaan browser tidak bisa mengirim header `Authorization`, jadi frontend memakai
+`fetch` + `ReadableStream` (lihat `admin-web/lib/api.ts` → `openDashboardStream`). Bila koneksi
+terputus, klien mencoba menyambung ulang otomatis setiap 5 detik.
+
+### Statistik live untuk mobile
+
+`GET /api/events/:id/stats` (publik, tanpa token) mengembalikan sisa kuota, persentase terjual,
+penjualan 24 jam terakhir, serta estimasi sold out per kelas tiket:
+
+```json
+{
+  "success": true,
+  "data": {
+    "total_quota": 1500,
+    "total_sold": 832,
+    "remaining": 668,
+    "percent_sold": 55,
+    "is_sold_out": false,
+    "sold_24h": 12,
+    "estimated_sold_out_at": "2026-12-02",
+    "categories": [
+      { "id": 1, "name": "VIP", "remaining": 80, "percent_sold": 60, "days_left": 4, "per_day": 20 }
+    ]
+  }
+}
+```
 
 ---
 
